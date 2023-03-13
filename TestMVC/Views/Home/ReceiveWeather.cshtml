@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "ReceiveWeather";
+}
+
+<h2>Receive Weather</h2>
+
+@*<script src="~/Scripts/jquery-1.6.4.js"></script>
+<script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
+<script src="/signalr/hubs"></script>*@
+<script>
+    //var SignalrConnection
+    //function Connect() {
+    //    //This will hold the connection to the signalr hub
+    //    SignalrConnection = $.connection.chatHub;
+
+    //    $.connection.hub.qs = { 'UserName': $('#username').val() };
+    //    //This will be called by signalr
+    //    SignalrConnection.client.NotifyUser = function (message) {
+    //        $('span').text(message);
+    //    }
+
+    //    //connecting the client to the signalr hub
+    //    $.connection.hub.start().done(function () {
+    //        GetWeather();
+    //        alert("Connected to Signalr Server");
+    //    })
+    //        .fail(function () {
+    //            alert("failed in connecting to the signalr server");
+    //        })
+
+    //}
+
+    //function GetWeather() {
+    //    //calling the GetWeather function on the signalr server
+    //    SignalrConnection.server.GetWeather()
+    //}
+
+    //Connect();
+</script>
+<div style="text-align:center;">
+    <input type="text" id="username" value="@Session["username"].ToString()" />
+    Message : <span></span> 
+</div>

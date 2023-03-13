@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<body>
+    <div style="text-align:center;">
+        <input type="text" id="txtTemperature" />
+        <button id="btnChange" onclick="ChangeWeather();">Change Weather</button>
+    </div>
+
+</body> 
+<script src="~/Scripts/jquery-1.6.4.js"></script>
+<script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
+<script>
+    var SignalrConnection;
+    var ChatProxy;
+    function Connect() {
+        ChatServerUrl = "https://localhost:44339/";
+        var ChatUrl = ChatServerUrl + "signalr";
+
+        //This will hold the connection to the signalr hub
+        SignalrConnection = $.hubConnection(ChatUrl, { useDefaultPath: false });
+        ChatProxy = SignalrConnection.createHubProxy('ChatHub');
+
+        //connecting the client to the signalr hub
+        SignalrConnection.start().done(function () {
+
+            alert("Connected to Signalr Server");
+        })
+            .fail(function () {
+                alert("failed in connecting to the signalr server");
+            })
+
+    }
+
+    function ChangeWeather() {
+        //get the temperature from a textfield with id txtTemprature
+        var Temperature = document.getElementById('txtTemperature').value;
+
+        //calling the ChangeWeather function on the signalr server
+        ChatProxy.invoke('ChangeWeather', Temperature);
+    }
+
+
+    Connect();
+    $(document).ready(function () {
+      
+    })
+</script>

@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<p>Use this area to provide additional information.</p>
+<div style="text-align:center;">
+    Temperature : <span></span> &#x2103;
+</div>
+ 
+<script src="~/Scripts/jquery-1.6.4.js"></script>
+<script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
+
+
+<script>
+    var SignalrConnection;
+    var ChatProxy;
+    function Connect() {
+        ChatServerUrl = "https://localhost:44339/";
+        var ChatUrl = ChatServerUrl + "signalr";
+
+        //This will hold the connection to the signalr hub
+        SignalrConnection = $.hubConnection(ChatUrl, { useDefaultPath: false });
+        ChatProxy = SignalrConnection.createHubProxy('ChatHub');
+
+        //This will be called by signalr
+        ChatProxy.on("NotifyUser", function (temperature) {
+            $('span').text(temperature);
+        });
+
+        //connecting the client to the signalr hub
+        SignalrConnection.start().done(function () {
+            GetWeather();
+            alert("Connected to Signalr Server");
+        })
+            .fail(function () {
+                alert("failed in connecting to the signalr server");
+            })
+
+    }
+
+    function GetWeather() {
+        //calling the GetWeather function on the signalr server
+        ChatProxy.invoke('GetWeather');
+    }
+    Connect();
+    $(document).load(function () {
+       
+    })
+</script>

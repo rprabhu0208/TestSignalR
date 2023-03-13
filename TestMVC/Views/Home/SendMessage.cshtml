@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "ChangeWeather";
+}
+
+<h2>Change Weather</h2>
+
+<div style="text-align:center;">
+    <span>LogIn User : @Session["username"].ToString()</span>
+    <input type="hidden" id="username" value="@Session["username"].ToString()" />
+    <input type="text" id="sentTo" value="" placeholder="sent to " />
+    <input type="text" id="txtMessage" placeholder="message" />
+    <button id="btnChange" onclick="SendMessage();">Send</button>
+
+
+    <span id="message"></span>
+</div>
+<script src="~/Scripts/jquery-1.6.4.js"></script>
+<script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
+<script src="/signalr/hubs"></script>
+<script>
+    var SignalrConnection;
+    var ConnectionId;
+    function Connect() {
+        //This will hold the connection to the signalr hub
+        SignalrConnection = $.connection.chatHub; 
+
+        $.connection.hub.qs = { 'UserName': $('#username').val() };
+
+       SignalrConnection.client.NotifyUser = function (message) {
+            debugger;
+            $('#message').text(message);
+        }
+        //connecting the client to the signalr hub
+        $.connection.hub.start().done(function () {
+            
+            ConnectionId = SignalrConnection.connection.id;
+            console.log('connectionId' + ConnectionId);
+            console.log("Connected to Signalr Server");
+        })
+            .fail(function () {
+                alert("failed in connecting to the signalr server");
+            })
+
+    }
+
+    function SendMessage() { 
+        var message = document.getElementById('txtMessage').value;
+        var SentTo = document.getElementById('sentTo').value; 
+        debugger;
+        SignalrConnection.server.sendMessage(SentTo, message)
+    }
+
+    Connect();
+</script>
